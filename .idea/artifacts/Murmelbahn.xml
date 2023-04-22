@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="Murmelbahn">
+    <output-path>$PROJECT_DIR$/out/artifacts/Murmelbahn</output-path>
+    <root id="root">
+      <element id="archive" name="Murmelbahn.jar">
+        <element id="module-output" name="Murmelbahn" />
+      </element>
+    </root>
+  </artifact>
+</component>

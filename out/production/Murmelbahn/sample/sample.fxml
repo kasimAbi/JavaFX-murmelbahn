@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="ganzerFeld" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseMoved="#displayPosition" prefHeight="750.0" prefWidth="1200.0" style="-fx-background-color: rgba(14, 37, 49, 0.8);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <Pane minWidth="150.0" style="-fx-background-color: #2f2f2f;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button alignment="CENTER" layoutX="25.0" layoutY="85.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #262626;" text="Resetten" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="25.0" layoutY="143.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #262626;" text="Schließen" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Label layoutX="9.0" layoutY="672.0" text="Credits:" textFill="#e4e4e4">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="9.0" layoutY="702.0" text="Kasim Mermer" textFill="#e4e4e4" />
+            <Label layoutX="9.0" layoutY="719.0" text="Luka Jona Langenscheidt" textFill="#e4e4e4" />
+            <Button alignment="CENTER" layoutY="14.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: no;" text="Projekt" textFill="WHITE">
+               <font>
+                  <Font size="29.0" />
+               </font>
+            </Button>
+            <Line endX="-7.8000030517578125" layoutX="147.0" layoutY="668.0" startX="-136.1999969482422" stroke="#e4e4e4" />
+         </children>
+      </Pane>
+      <Pane id="pane_projekt" layoutX="150.0" layoutY="10.0" prefHeight="175.0" prefWidth="1043.0">
+         <children>
+            <Pane layoutY="-14.0" prefHeight="192.0" prefWidth="1043.0">
+               <children>
+                  <Slider id="slider_blaue_murmel_gewicht" fx:id="slider_gravitation" layoutX="211.0" layoutY="97.0" max="12.0" min="5.0" value="9.81" />
+                  <Label layoutX="45.0" layoutY="95.0" text="Gravitation:" textFill="WHITE" />
+                  <Label layoutX="45.0" layoutY="122.0" text="Windbeschleunigung:" textFill="WHITE" />
+                  <Slider id="slider_grüne_murmel_gewicht" fx:id="slider_windstärke_richtung" layoutX="211.0" layoutY="124.0" max="5.0" min="-5.0" />
+                  <Label id="label_blaue_murmel_gewicht" fx:id="label_gravitation" layoutX="363.0" layoutY="95.0" text="9,81 m/s²" textFill="WHITE" />
+                  <Label id="label_grüne_murmel_gewicht" fx:id="label_windstärke_richtung" layoutX="363.0" layoutY="122.0" text="0 m/s²" textFill="WHITE" />
+                  <Label layoutX="22.0" layoutY="14.0" prefHeight="50.0" text="Murmelbahn" textFill="WHITE">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="463.0" layoutY="123.0" text="Rechteckwinkel:" textFill="WHITE" />
+                  <Slider id="slider_startwinkel" fx:id="slider_startwinkel" disable="true" layoutX="628.0" layoutY="125.0" max="360.0" value="45.0" />
+                  <Label id="label_startwinkel" fx:id="label_startwinkel" layoutX="780.0" layoutY="123.0" text="315°" textFill="WHITE" />
+                  <Label layoutX="463.0" layoutY="95.0" text="Startgeschwindigkeit:" textFill="WHITE" />
+                  <Slider id="slider_startgeschwindigkeit" fx:id="slider_startgeschwindigkeit" layoutX="629.0" layoutY="97.0" max="20.0" min="2.0" value="2.0" />
+                  <Label id="label_startgeschwindigkeit" fx:id="label_startgeschwindigkeit" layoutX="781.0" layoutY="95.0" text="2 m/s" textFill="WHITE" />
+                  <Circle fill="#0088ff00" layoutX="946.0" layoutY="108.0" radius="60.0" strokeType="INSIDE">
+                     <stroke>
+                        <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </RadialGradient>
+                     </stroke>
+                  </Circle>
+                  <Circle fx:id="joystick" layoutX="946.0" layoutY="108.0" onMouseDragged="#onJoystickDragged" onMouseReleased="#onJoystickReleased" radius="20.0" stroke="#b4bbd980" strokeType="INSIDE">
+                     <fill>
+                        <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.6162962913513184" green="0.7112098932266235" blue="0.800000011920929" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="0.2094866782426834" green="0.1325536072254181" blue="0.42105263471603394" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </RadialGradient>
+                     </fill>
+                  </Circle>
+                  <Label fx:id="startRichtung" layoutX="904.0" layoutY="22.0" text="Rollwinkel: 270°" textFill="WHITE" />
+                  <Button fx:id="is_rolling_button" layoutX="896.0" layoutY="178.0" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#kugelRollt" text="Es fällt" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Circle fx:id="blaue_murmel" fill="DODGERBLUE" layoutX="455.0" layoutY="507.0" onMouseDragged="#onBlaueMurmelDragged" onMouseReleased="#onBlaueMurmelReleased" radius="23.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle id="startbahn" fx:id="startbahn" arcHeight="7.0" arcWidth="7.0" fill="RED" height="2.0" layoutX="374.0" layoutY="407.0" rotate="45.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="400.0" />
+      <ImageView id="button_play" fx:id="image_play_button" disable="true" fitHeight="70.0" fitWidth="70.0" layoutX="498.0" layoutY="632.0" nodeOrientation="INHERIT" onMouseClicked="#startAndPlay" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../images/resume.png" />
+         </image>
+         <viewport>
+            <Rectangle2D />
+         </viewport>
+      </ImageView>
+      <Label fx:id="status_text" layoutX="170.0" layoutY="720.0" text="Maus Position: X = 0, Y = 0" textFill="WHITE" />
+      <Text fx:id="text_richtung_blaue_murmel" fill="#00ff09" layoutX="170.0" layoutY="680.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blaue-Murmel Richtung: 270°" />
+      <Text fx:id="text_gesch_blaue_murmel_y" fill="#00ffe4" layoutX="170.0" layoutY="663.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blaue-Murmel Geschwindigkeit y: 0m/s" />
+      <Text fx:id="text_gesch_blaue_murmel_x" fill="#00ffe4" layoutX="170.0" layoutY="646.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Blaue-Murmel Geschwindigkeit x: 0m/s" />
+      <Button fx:id="startButton" layoutX="690.0" layoutY="638.0" minWidth="75.0" mnemonicParsing="false" onAction="#startAndPlay" text="Start" />
+    </children>
+</AnchorPane>
