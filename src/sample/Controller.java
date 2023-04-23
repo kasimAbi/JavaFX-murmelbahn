@@ -57,7 +57,6 @@ public class Controller {
     private PieceCircle pieceCircleBlaueMurmel, pieceCircleJoystick;
     private ArrayList<PieceCircle> listPieceCircle = new ArrayList<PieceCircle>();
     private ArrayList<PieceRectangle> listPieceRectangle = new ArrayList<PieceRectangle>();
-
     private static DecimalFormat df2 = new DecimalFormat("#.##");
     private static DecimalFormat df1 = new DecimalFormat("#.#");
     private final int fpx = 100;
@@ -118,7 +117,7 @@ public class Controller {
         pieceCircleJoystick = new PieceCircle(joystick.getLayoutX(), joystick.getLayoutY(), joystick.getRadius(), joystick, new Vektor());
         pieceCircleBlaueMurmel = new PieceCircle(blaue_murmel.getLayoutX() / xPixelFürEinMeter, blaue_murmel.getLayoutY() / xPixelFürEinMeter, blaue_murmel.getRadius(),blaue_murmel, new Vektor());
         listPieceCircle.add(pieceCircleBlaueMurmel);
-        listPieceCircle.get(0).draw(ganzerFeld.getHeight(), xPixelFürEinMeter);
+        drawCircle(0);
 
         PieceRectangle pieceRectangle = new PieceRectangle(startbahn.getLayoutX(), startbahn.getLayoutY(), ((int) startbahn.getHeight()), ((int) startbahn.getWidth()), startbahn);
         listPieceRectangle.add(pieceRectangle);
@@ -194,11 +193,7 @@ public class Controller {
         pieceCircleBlaueMurmel.position.x = event.getSceneX() / xPixelFürEinMeter;
         pieceCircleBlaueMurmel.position.y = (ganzerFeld.getHeight() - event.getSceneY()) / xPixelFürEinMeter;
 
-        if(listPieceCircle.get(0).position.x > (ganzerFeld.getWidth() - listPieceCircle.get(0).getRadius()) / xPixelFürEinMeter){ listPieceCircle.get(0).position.x = (ganzerFeld.getWidth() - listPieceCircle.get(0).getRadius()) / xPixelFürEinMeter; listPieceCircle.get(0).getGeschwindigkeitV().x = 0.0; }
-        else if(listPieceCircle.get(0).position.x < (150 + listPieceCircle.get(0).getRadius()) / xPixelFürEinMeter){ listPieceCircle.get(0).position.x = (150 + listPieceCircle.get(0).getRadius()) / xPixelFürEinMeter; listPieceCircle.get(0).getGeschwindigkeitV().x = 0.0; }
-        if(listPieceCircle.get(0).position.y > (ganzerFeld.getHeight() - listPieceCircle.get(0).getRadius()) / xPixelFürEinMeter){ listPieceCircle.get(0).position.y = (ganzerFeld.getHeight() - listPieceCircle.get(0).getRadius()) / xPixelFürEinMeter; }
-        else if(listPieceCircle.get(0).position.y < listPieceCircle.get(0).getRadius() / xPixelFürEinMeter ){ listPieceCircle.get(0).position.y = (listPieceCircle.get(0).getRadius()) / xPixelFürEinMeter; listPieceCircle.get(0).getGeschwindigkeitV().y = 0.0; }
-        pieceCircleBlaueMurmel.draw(ganzerFeld.getHeight(), xPixelFürEinMeter);
+        drawCircle(0);
 
         buttonPlay = false;
         startButton.setText("Start");
@@ -378,8 +373,6 @@ public class Controller {
         strecke.addition(Vektor.scalareMultiplikationProdukt(geschwindigkeitV, deltaTime));
         // Teil 2 der Formel: s0 = s01 + 0.5 * a * t²
         strecke.addition(Vektor.scalareMultiplikationProdukt(beschleunigungA, 0.5 * Math.pow(deltaTime, 2)));
-        System.out.println("\nstrecke x: " + strecke.x);
-        System.out.println("strecke y: " + strecke.y);
 
         // x Pixel sind ein Meter - Berechnung
         pixelZurMeter(strecke);
@@ -390,10 +383,14 @@ public class Controller {
         listPieceCircle.get(index).setGeschwindigkeitV(geschwindigkeitV);
         listPieceCircle.get(index).setBeschleunigungA(beschleunigungA);
         listPieceCircle.get(index).updateVorherigePosition();
-        listPieceCircle.get(index).position.addition(new Vektor(strecke.x, strecke.y));
-        listPieceCircle.get(index).vorherigeDeltaXY = listPieceCircle.get(index).deltaXY;
+        listPieceCircle.get(index).position.addition(strecke);
+        listPieceCircle.get(index).vorherigeDeltaXY = new Vektor(listPieceCircle.get(index).deltaXY.x, listPieceCircle.get(index).deltaXY.y);
         listPieceCircle.get(index).updateDeltaXY();
 
+        drawCircle(index);
+    }
+
+    public void drawCircle(int index){
         // Positioniert die Murmel nach der neuen Berechnung
         if(listPieceCircle.get(index).position.x > (ganzerFeld.getWidth() - listPieceCircle.get(index).getRadius()) / xPixelFürEinMeter){ listPieceCircle.get(index).position.x = (ganzerFeld.getWidth() - listPieceCircle.get(index).getRadius()) / xPixelFürEinMeter; listPieceCircle.get(index).getGeschwindigkeitV().x = 0.0; }
         else if(listPieceCircle.get(index).position.x < (150 + listPieceCircle.get(index).getRadius()) / xPixelFürEinMeter){ listPieceCircle.get(index).position.x = (150 + listPieceCircle.get(index).getRadius()) / xPixelFürEinMeter; listPieceCircle.get(index).getGeschwindigkeitV().x = 0.0; }
