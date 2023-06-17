@@ -48,7 +48,7 @@ public class Controller {
     private Circle blaue_murmel, joystick, gruene_murmel;
 
     @FXML
-    private Rectangle startbahn, bahn1, bahn2, bahn3, bahn4;
+    private Rectangle startbahn, bahn1, bahn2, bahn3, bahn4, bahn5, bahn6;
 
     @FXML
     private ImageView image_play_button;
@@ -148,6 +148,10 @@ public class Controller {
         pieceRectangle = new PieceRectangle(bahn3.getLayoutX(), bahn3.getLayoutY(), ((int) bahn3.getHeight()), ((int) bahn3.getWidth()), bahn3);
         listPieceRectangle.add(pieceRectangle);
         pieceRectangle = new PieceRectangle(bahn4.getLayoutX(), bahn4.getLayoutY(), ((int) bahn4.getHeight()), ((int) bahn4.getWidth()), bahn4);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn5.getLayoutX(), bahn5.getLayoutY(), ((int) bahn5.getHeight()), ((int) bahn5.getWidth()), bahn5);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn6.getLayoutX(), bahn6.getLayoutY(), ((int) bahn6.getHeight()), ((int) bahn6.getWidth()), bahn6);
         listPieceRectangle.add(pieceRectangle);
     }
 
@@ -548,10 +552,6 @@ public class Controller {
             double collisionAngle = -Math.atan2(distanceY, distanceX);
             Vektor normalVector = new Vektor(-Math.cos(collisionAngle), Math.sin(collisionAngle));
 
-            // Energieverlust berechnen
-            murmel1.getGeschwindigkeitV().scalareMultiplikationProdukt(k);
-            murmel2.getGeschwindigkeitV().scalareMultiplikationProdukt(k);
-
             Vektor v_parallel_1 = Vektor.projektion(murmel1.getGeschwindigkeitV(), normalVector);
             Vektor v_parallel_2 = Vektor.projektion(murmel2.getGeschwindigkeitV(), normalVector);
 
@@ -559,6 +559,9 @@ public class Controller {
             Vektor v_senkrecht_1 = Vektor.subtraktion(murmel1.getGeschwindigkeitV(), v_parallel_1);
             Vektor v_senkrecht_2 = Vektor.subtraktion(murmel2.getGeschwindigkeitV(), v_parallel_2);
 
+            // Energieverlust berechnen
+            v_parallel_1.scalareMultiplikationProdukt(k);
+            v_parallel_2.scalareMultiplikationProdukt(k);
 
             // Berechnung der Massenverhältnisse
             double massSum = m1 + m2;

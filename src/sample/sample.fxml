@@ -27,7 +27,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="closeButton" alignment="CENTER" layoutX="25.0" layoutY="143.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #262626;" text="Schließen" textFill="WHITE">
+            <Button fx:id="closeButton" alignment="CENTER" layoutX="25.0" layoutY="143.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #262626;" text="Schließen" textFill="WHITE" visible="false">
                <font>
                   <Font size="18.0" />
                </font>
@@ -51,6 +51,10 @@
             <Text fx:id="text_richtung_gruene_murmel" fill="YELLOW" layoutX="10.0" layoutY="632.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Richtung: 270°" />
             <Text fx:id="text_gesch_gruene_murmel_y" fill="YELLOW" layoutX="10.0" layoutY="612.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Velocity y: 0m/s" />
             <Text fx:id="text_gesch_gruene_murmel_x" fill="YELLOW" layoutX="10.0" layoutY="592.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Velocity x: 0m/s" />
+            <Label layoutX="9.0" layoutY="137.0" text="Resettet:" textFill="WHITE" />
+            <Label layoutX="9.0" layoutY="160.0" text="- Gravitation" textFill="WHITE" />
+            <Label layoutX="9.0" layoutY="177.0" text="- Windbeschleunigung" textFill="WHITE" />
+            <Label layoutX="9.0" layoutY="194.0" text="- Kugelpositionen" textFill="WHITE" />
          </children>
       </Pane>
       <Pane id="pane_projekt" layoutX="150.0" layoutY="10.0" prefHeight="175.0" prefWidth="1043.0">
@@ -131,7 +135,7 @@
       <Circle fx:id="blaue_murmel" fill="DODGERBLUE" layoutX="455.0" layoutY="507.0" onMouseDragged="#onBlaueMurmelDragged" onMouseReleased="#onBlaueMurmelReleased" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
       <Line fx:id="line" />
       <Circle fx:id="gruene_murmel" fill="YELLOW" layoutX="678.0" layoutY="507.0" onMouseDragged="#onGrueneMurmelDragged" onMouseReleased="#onGrueneMurmelReleased" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle id="startbahn" fx:id="startbahn" fill="#2f2f2f" height="20.0" layoutX="374.0" layoutY="407.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="400.0" />
+      <Rectangle id="startbahn" fx:id="startbahn" fill="#2f2f2f" height="20.0" layoutX="209.0" layoutY="375.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="400.0" />
       <ImageView id="button_play" fx:id="image_play_button" disable="true" fitHeight="70.0" fitWidth="70.0" layoutX="498.0" layoutY="632.0" nodeOrientation="INHERIT" onMouseClicked="#startAndPlay" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/resume.png" />
@@ -140,11 +144,13 @@
             <Rectangle2D />
          </viewport>
       </ImageView>
-      <Button fx:id="startButton" layoutX="600.0" layoutY="632.0" minWidth="75.0" mnemonicParsing="false" onAction="#startAndPlay" text="Start" />
+      <Button fx:id="startButton" layoutX="945.0" layoutY="218.0" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#startAndPlay" text="Start" textFill="#00b000" />
       <Button fx:id="uebernehmen_button" layoutX="1086.0" layoutY="218.0" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#uebernehmen" text="Übernehmen" />
-      <Rectangle id="startbahn" fx:id="bahn1" fill="#2f2f2f" height="20.0" layoutX="827.0" layoutY="465.0" rotate="165.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="293.0" />
+      <Rectangle id="startbahn" fx:id="bahn1" fill="#2f2f2f" height="20.0" layoutX="506.0" layoutY="667.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="274.0" />
       <Rectangle id="startbahn" fx:id="bahn2" fill="#2f2f2f2e" height="15.0" layoutX="150.0" layoutY="735.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="4000.0" />
-      <Rectangle id="startbahn" fx:id="bahn4" fill="#2f2f2f" height="20.0" layoutX="672.0" layoutY="585.0" rotate="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="143.0" />
-      <Rectangle id="startbahn" fx:id="bahn3" fill="#2f2f2f" height="20.0" layoutX="836.0" layoutY="657.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
+      <Rectangle id="startbahn" fx:id="bahn4" fill="#2f2f2f" height="20.0" layoutX="208.0" layoutY="617.0" rotate="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="236.0" />
+      <Rectangle id="startbahn" fx:id="bahn3" fill="#2f2f2f" height="20.0" layoutX="813.0" layoutY="555.0" rotate="165.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
+      <Rectangle id="startbahn" fx:id="bahn5" fill="#2f2f2f" height="20.0" layoutX="608.0" layoutY="515.0" rotate="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="205.0" />
+      <Rectangle id="startbahn" fx:id="bahn6" fill="#2f2f2f" height="20.0" layoutX="936.0" layoutY="336.0" rotate="30.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="83.0" />
     </children>
 </AnchorPane>
