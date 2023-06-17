@@ -1,7 +1,8 @@
 package sample.objekte;
 
 import javafx.scene.shape.Circle;
-import sample.utilities.Vektor;
+import sample.Main;
+import sample.Vektor;
 
 public class PieceCircle {
 
@@ -13,9 +14,11 @@ public class PieceCircle {
     public Vektor vorherigeDeltaXY = new Vektor(0, 0);
     private Vektor geschwindigkeitV = new Vektor(0, 0);
     private Vektor beschleunigungA = new Vektor(0, 0);
-    private final int gewichtInGramm = 300;    // in Gramm
     private Circle circle;
     public boolean isRolling = false;
+    public boolean isCollision = false;
+
+    public int[] rollingDetails = new int[]{0, -1};     // 0 (es rollt), -1 (auf welchem rechteck es rollt)
 
     double strecke = 0.0;
     double vorherigeStrecke = 0.0;
@@ -31,10 +34,10 @@ public class PieceCircle {
      *
      * Wir nehmen den Holzwert (0.3) als Defaultwert
      */
-    public double reibungskoeffizient = 0.3; // geeigneter Wert für den Reibungskoeffizienten
+    public double reibungskoeffizient = 0.1; // geeigneter Wert für den Reibungskoeffizienten
 
-    // Gewicht in Gramm
-    public double gewicht = 3.5;
+    // Gewicht in Kilogramm
+    public double gewicht = 0.5;
 
     public PieceCircle(double x, double y, double radius, Circle circle, Vektor geschwindigkeit){
         this.position = new Vektor(x, y);
@@ -54,15 +57,11 @@ public class PieceCircle {
         this.radius = radius;
     }
 
-    public int getGewichtInGramm() {
-        return this.gewichtInGramm;
-    }
-
     public Vektor getGeschwindigkeitV() {
         return this.geschwindigkeitV;
     }
 
-    public void setGeschwindigkeitV(Vektor geschwindigkeitV) {
+    public void setGeschwindigkeitV (Vektor geschwindigkeitV) {
         this.geschwindigkeitV = geschwindigkeitV;
     }
 
@@ -120,5 +119,12 @@ public class PieceCircle {
     public void updateDeltaXY(){
         this.deltaXY.x = this.position.x - this.vorherigePosition.x;
         this.deltaXY.y = this.position.y - this.vorherigePosition.y;
+    }
+
+
+
+    public void applyImpulse(Vektor impulse) {
+        geschwindigkeitV.x += impulse.x / gewicht;
+        geschwindigkeitV.y += impulse.y / gewicht;
     }
 }
