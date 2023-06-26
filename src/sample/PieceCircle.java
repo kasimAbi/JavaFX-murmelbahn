@@ -1,4 +1,4 @@
-package sample.objekte;
+package sample;
 
 import javafx.scene.shape.Circle;
 import sample.Main;
@@ -25,16 +25,10 @@ public class PieceCircle {
 
     /**
      * Reibungskoeffizienten:
-     * Autoreifen auf Straße: 0,7
-     * Holz auf Holz: 0,3
-     * Stahl auf Stahl: 0,1
-     * Leder auf Metall: 0,3
-     * Ski auf Schnee: 0,05
-     * Quelle: https://www.maschinenbau-wissen.de/skript3/mechanik/kinetik/289-reibungskoeffizient
-     *
-     * Wir nehmen den Holzwert (0.3) als Defaultwert
+     * Autoreifen auf glatter Asphaltstraße: 0.1
+     * Quelle: https://www.schweizer-fn.de/stoff/reibwerte/reibwerte_sonstige.php
      */
-    public double reibungskoeffizient = 0.1; // geeigneter Wert für den Reibungskoeffizienten
+    public double reibungskoeffizient = 0.01; // geeigneter Wert für den Reibungskoeffizienten
 
     // Gewicht in Kilogramm
     public double gewicht = 0.5;

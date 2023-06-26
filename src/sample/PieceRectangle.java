@@ -1,4 +1,4 @@
-package sample.objekte;
+package sample;
 
 import javafx.scene.shape.Rectangle;
 

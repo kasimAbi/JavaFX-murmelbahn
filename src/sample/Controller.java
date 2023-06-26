@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -18,8 +19,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import sample.objekte.PieceCircle;
-import sample.objekte.PieceRectangle;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -34,10 +33,13 @@ public class Controller {
     private AnchorPane ganzerFeld;
 
     @FXML
-    private Slider slider_gravitation, slider_windstärke_richtung, slider_startgeschwindigkeit, slider_startwinkel;
+    private Slider slider_gravitation, slider_windstärke_richtung, slider_startgeschwindigkeit;
 
     @FXML
-    private Label label_gravitation, label_windstärke_richtung, label_startgeschwindigkeit, label_startwinkel, status_text, startRichtung;
+    private Slider slider_rechteckWinkel1, slider_gewicht, slider_rechteckLaenge;
+
+    @FXML
+    private Label label_gravitation, label_windstärke_richtung, label_startgeschwindigkeit, label_startwinkel, status_text, startRichtung, label_gewicht;
 
     @FXML
     private Text text_richtung_blaue_murmel, text_gesch_blaue_murmel_x, text_gesch_blaue_murmel_y;
@@ -48,7 +50,7 @@ public class Controller {
     private Circle blaue_murmel, joystick, gruene_murmel;
 
     @FXML
-    private Rectangle startbahn, bahn1, bahn2, bahn3, bahn4;
+    private Rectangle startbahn, bahn1, bahn2, bahn3, bahn4, bahn5, bahn6, bahn7, bahn8, bahn9, bahn10, bahn11, bahn12, bahn13, bahn14, bahn15, bahn16, bahn17, bahn18, bahn19, bahn20;
 
     @FXML
     private ImageView image_play_button;
@@ -56,7 +58,7 @@ public class Controller {
     @FXML
     private Button startButton, chosed_blue, chosed_green;
 
-    int chosed = 0;
+    int chosed = 0, chosedRectange = 0, addedRectange = 0;
 
     @FXML
     private Line line;
@@ -67,7 +69,7 @@ public class Controller {
     private ArrayList<PieceRectangle> listPieceRectangle = new ArrayList<PieceRectangle>();
     private static DecimalFormat df2 = new DecimalFormat("#.##");
     private static DecimalFormat df1 = new DecimalFormat("#.#");
-    private final int fpx = 100;
+    private final int fpx = 1000;
 
     // Anzahl Pixel entsprechen einen Meter
     private final double joystickRadiusZurGrenze = 40.0, xPixelFürEinMeter = 5.0, deltaTime = (1000.0/fpx/1000.0);  // 1000ms = 1s / frames / 1000.0 weil man in sekunden haben will.
@@ -86,21 +88,21 @@ public class Controller {
     // Energieverlust
     double k = 0.75;
 
-    public void initial(){
-        slider_gravitation.valueProperty().addListener(new ChangeListener<Number>(){
+    public void initial() {
+        slider_gravitation.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1){
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 gravitation.y = -t1.doubleValue();
                 label_gravitation.setText(df2.format(Math.abs(gravitation.y)) + " m/s²");
             }
         });
 
-        slider_windstärke_richtung.valueProperty().addListener(new ChangeListener<Number>(){
+        slider_windstärke_richtung.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1){
-                if(Math.abs(t1.doubleValue()) < 0.2){
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                if (Math.abs(t1.doubleValue()) < 0.2) {
                     windbeschleunigungA = 0.0;
-                }else {
+                } else {
                     windbeschleunigungA = t1.doubleValue();
                 }
                 label_windstärke_richtung.setText(df1.format(windbeschleunigungA) + " m/s²");
@@ -108,34 +110,35 @@ public class Controller {
             }
         });
 
-        slider_startgeschwindigkeit.valueProperty().addListener(new ChangeListener<Number>(){
+        slider_startgeschwindigkeit.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1){
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 startGeschwindigkeit = t1.doubleValue();
                 label_startgeschwindigkeit.setText(df2.format(startGeschwindigkeit) + " m/s.");
             }
         });
 
-        slider_startwinkel.valueProperty().addListener(new ChangeListener<Number>(){
+        slider_gewicht.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1){
-                label_startwinkel.setText((t1.intValue() == 0.0 ? "" : "-") + t1.intValue() + "°");
-                startbahn.setRotate(t1.intValue());
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                label_gewicht.setText(df2.format(t1.doubleValue()) + " kg");
             }
         });
 
         pieceCircleJoystick = new PieceCircle(joystick.getLayoutX(), joystick.getLayoutY(), joystick.getRadius(), joystick, new Vektor());
-        pieceCircleBlaueMurmel = new PieceCircle(blaue_murmel.getLayoutX() / xPixelFürEinMeter, blaue_murmel.getLayoutY() / xPixelFürEinMeter, blaue_murmel.getRadius(),blaue_murmel, new Vektor());
+        pieceCircleBlaueMurmel = new PieceCircle(blaue_murmel.getLayoutX() / xPixelFürEinMeter, blaue_murmel.getLayoutY() / xPixelFürEinMeter, blaue_murmel.getRadius(), blaue_murmel, new Vektor());
         listPieceCircle.add(pieceCircleBlaueMurmel);
-        pieceCircleGrueneMurmel = new PieceCircle(gruene_murmel.getLayoutX() / xPixelFürEinMeter, gruene_murmel.getLayoutY() / xPixelFürEinMeter, gruene_murmel.getRadius(),gruene_murmel, new Vektor());
+        pieceCircleGrueneMurmel = new PieceCircle(gruene_murmel.getLayoutX() / xPixelFürEinMeter, gruene_murmel.getLayoutY() / xPixelFürEinMeter, gruene_murmel.getRadius(), gruene_murmel, new Vektor());
         listPieceCircle.add(pieceCircleGrueneMurmel);
 
+        //listPieceCircle.get(0).setRadius(20);
+        //listPieceCircle.get(0).getCircle().setRadius(20);
         //listPieceCircle.get(0).gewicht = 30;
 
-        startPositionBlaueMurmel = new PieceCircle(blaue_murmel.getLayoutX() / xPixelFürEinMeter, blaue_murmel.getLayoutY() / xPixelFürEinMeter, blaue_murmel.getRadius(),blaue_murmel, new Vektor());
-        startPositionGrüneMurmel = new PieceCircle(gruene_murmel.getLayoutX() / xPixelFürEinMeter, gruene_murmel.getLayoutY() / xPixelFürEinMeter, gruene_murmel.getRadius(),gruene_murmel, new Vektor());
+        startPositionBlaueMurmel = new PieceCircle(blaue_murmel.getLayoutX() / xPixelFürEinMeter, blaue_murmel.getLayoutY() / xPixelFürEinMeter, blaue_murmel.getRadius(), blaue_murmel, new Vektor());
+        startPositionGrüneMurmel = new PieceCircle(gruene_murmel.getLayoutX() / xPixelFürEinMeter, gruene_murmel.getLayoutY() / xPixelFürEinMeter, gruene_murmel.getRadius(), gruene_murmel, new Vektor());
 
-        for(int index = 0; index < listPieceCircle.size(); index++){
+        for (int index = 0; index < listPieceCircle.size(); index++) {
             drawCircle(index);
         }
 
@@ -149,6 +152,42 @@ public class Controller {
         listPieceRectangle.add(pieceRectangle);
         pieceRectangle = new PieceRectangle(bahn4.getLayoutX(), bahn4.getLayoutY(), ((int) bahn4.getHeight()), ((int) bahn4.getWidth()), bahn4);
         listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn5.getLayoutX(), bahn5.getLayoutY(), ((int) bahn5.getHeight()), ((int) bahn5.getWidth()), bahn5);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn6.getLayoutX(), bahn6.getLayoutY(), ((int) bahn6.getHeight()), ((int) bahn6.getWidth()), bahn6);
+        listPieceRectangle.add(pieceRectangle);
+
+        pieceRectangle = new PieceRectangle(bahn7.getLayoutX(), bahn7.getLayoutY(), ((int) bahn7.getHeight()), ((int) bahn7.getWidth()), bahn7);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn8.getLayoutX(), bahn8.getLayoutY(), ((int) bahn8.getHeight()), ((int) bahn8.getWidth()), bahn8);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn9.getLayoutX(), bahn9.getLayoutY(), ((int) bahn9.getHeight()), ((int) bahn9.getWidth()), bahn9);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn10.getLayoutX(), bahn10.getLayoutY(), ((int) bahn10.getHeight()), ((int) bahn10.getWidth()), bahn10);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn11.getLayoutX(), bahn11.getLayoutY(), ((int) bahn11.getHeight()), ((int) bahn11.getWidth()), bahn11);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn12.getLayoutX(), bahn12.getLayoutY(), ((int) bahn12.getHeight()), ((int) bahn12.getWidth()), bahn12);
+        listPieceRectangle.add(pieceRectangle);
+
+        pieceRectangle = new PieceRectangle(bahn13.getLayoutX(), bahn13.getLayoutY(), ((int) bahn13.getHeight()), ((int) bahn13.getWidth()), bahn13);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn14.getLayoutX(), bahn14.getLayoutY(), ((int) bahn14.getHeight()), ((int) bahn14.getWidth()), bahn14);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn15.getLayoutX(), bahn15.getLayoutY(), ((int) bahn15.getHeight()), ((int) bahn15.getWidth()), bahn15);
+        listPieceRectangle.add(pieceRectangle);
+
+        pieceRectangle = new PieceRectangle(bahn16.getLayoutX(), bahn16.getLayoutY(), ((int) bahn16.getHeight()), ((int) bahn16.getWidth()), bahn16);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn17.getLayoutX(), bahn17.getLayoutY(), ((int) bahn17.getHeight()), ((int) bahn17.getWidth()), bahn17);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn18.getLayoutX(), bahn18.getLayoutY(), ((int) bahn18.getHeight()), ((int) bahn18.getWidth()), bahn18);
+        listPieceRectangle.add(pieceRectangle);
+
+        pieceRectangle = new PieceRectangle(bahn19.getLayoutX(), bahn19.getLayoutY(), ((int) bahn19.getHeight()), ((int) bahn19.getWidth()), bahn19);
+        listPieceRectangle.add(pieceRectangle);
+        pieceRectangle = new PieceRectangle(bahn20.getLayoutX(), bahn20.getLayoutY(), ((int) bahn20.getHeight()), ((int) bahn20.getWidth()), bahn20);
+        listPieceRectangle.add(pieceRectangle);
     }
 
     public void uebernehmen(){
@@ -161,6 +200,8 @@ public class Controller {
         //            listPieceCircle.get(0).getGeschwindigkeitV().länge() == 0.0 ? startGeschwindigkeit : listPieceCircle.get(0).getGeschwindigkeitV().länge()));
         //}
         listPieceCircle.get(chosed).setGeschwindigkeitV(Vektor.scalareMultiplikationProdukt(direction, startGeschwindigkeit));
+
+        listPieceCircle.get(chosed).gewicht = slider_gewicht.getValue();
         zuruecksetzen(chosed);
     }
 
@@ -171,6 +212,7 @@ public class Controller {
             listPieceCircle.get(index).setGeschwindigkeitV(nullVektor);
             listPieceCircle.get(index).setBeschleunigungA(nullVektor);
             listPieceCircle.get(index).vorherigeDeltaXY = new Vektor(nullVektor.x, nullVektor.y);
+            listPieceCircle.get(index).gewicht = 0.3;
             zuruecksetzen(index);
         }
         listPieceCircle.get(0).position = new Vektor(startPositionBlaueMurmel.position.x, startPositionBlaueMurmel.position.y);
@@ -187,10 +229,115 @@ public class Controller {
 
         drawCircle(0);
         drawCircle(1);
+
+
+        for(int index = 0; index < listPieceRectangle.size(); index++){
+            if(!listPieceRectangle.get(index).getRectangle().getId().equals(bahn2.getId())){
+                listPieceRectangle.get(index).setB(100);
+                listPieceRectangle.get(index).getRectangle().setWidth(100);
+                listPieceRectangle.get(index).getRectangle().setRotate(0);
+                listPieceRectangle.get(index).setX(0);
+                listPieceRectangle.get(index).setY(375);
+                listPieceRectangle.get(index).getRectangle().setLayoutX(0);
+                listPieceRectangle.get(index).getRectangle().setLayoutY(375);
+            }
+        }
+        addedRectange = 0;
+
+        slider_rechteckLaenge.setDisable(true);
+        slider_rechteckWinkel1.setDisable(true);
+
+        showRichtungInLinie(line, 0);
+
+        if (buttonPlay){
+            startAndPlay();
+        }
     }
 
     @FXML
     private void displayPosition(MouseEvent event){ status_text.setText("Maus Position: X = " + event.getSceneX() + ", Y = " + event.getSceneY()); }
+
+    @FXML
+    public void setRectanglePlace(MouseEvent event){
+        Rectangle rectangle = (Rectangle) event.getSource();
+        for(int index = 0; index < listPieceRectangle.size(); index++){
+            if(rectangle.getId().equals(listPieceRectangle.get(index).getRectangle().getId())){
+                listPieceRectangle.get(index).setX(event.getSceneX() - rectangle.getWidth()/2.0);
+                listPieceRectangle.get(index).setY(event.getSceneY() - rectangle.getHeight()/2.0);
+                listPieceRectangle.get(index).getRectangle().setLayoutX(event.getSceneX() - rectangle.getWidth()/2.0);
+                listPieceRectangle.get(index).getRectangle().setLayoutY(event.getSceneY() - rectangle.getHeight()/2.0);
+                listPieceRectangle.get(index).getRectangle().setFill(Color.web("#383838"));
+                label_startwinkel.setText(((int) listPieceRectangle.get(index).getWinkel() == 0.0 ? "" : "-") + (int) listPieceRectangle.get(index).getWinkel() + "°");
+            }else if(index != 2){
+                listPieceRectangle.get(index).getRectangle().setFill(Color.web("#2f2f2f"));
+            }
+        }
+    }
+
+    @FXML
+    public void setRectangleChosed(MouseEvent event){
+        Rectangle rectangle = (Rectangle) event.getSource();
+        for(int index = 0; index < listPieceRectangle.size(); index++){
+            if(rectangle.getId().equals(listPieceRectangle.get(index).getRectangle().getId())){
+                chosedRectange = index;
+                slider_rechteckWinkel1.setValue(listPieceRectangle.get(index).getWinkel());
+                slider_rechteckWinkel1.setDisable(false);
+                slider_rechteckLaenge.setDisable(false);
+                listPieceRectangle.get(index).getRectangle().setFill(Color.web("#383838"));
+                label_startwinkel.setText(((int) listPieceRectangle.get(index).getWinkel() == 0.0 ? "" : "-") + (int) listPieceRectangle.get(index).getWinkel() + "°");
+            }else if(index != 2){
+                listPieceRectangle.get(index).getRectangle().setFill(Color.web("#2f2f2f"));
+            }
+        }
+    }
+
+    @FXML
+    public void setRectangleLength(MouseEvent event){
+        double placeX = listPieceRectangle.get(chosedRectange).getRectangle().getLayoutX();
+        double placeY = listPieceRectangle.get(chosedRectange).getRectangle().getLayoutY();
+        listPieceRectangle.get(chosedRectange).getRectangle().setWidth((int) slider_rechteckLaenge.getValue());
+        listPieceRectangle.get(chosedRectange).setB((int) slider_rechteckLaenge.getValue());
+        listPieceRectangle.get(chosedRectange).setX(placeX);
+        listPieceRectangle.get(chosedRectange).setY(placeY);
+        listPieceRectangle.get(chosedRectange).getRectangle().setLayoutX(placeX);
+        listPieceRectangle.get(chosedRectange).getRectangle().setLayoutY(placeY);
+        System.out.println(placeX + ", y: " + placeY);
+    }
+
+    @FXML
+    public void setRectangleRotate(MouseEvent event){
+        listPieceRectangle.get(chosedRectange).getRectangle().setRotate(slider_rechteckWinkel1.getValue());
+        label_startwinkel.setText(((int) listPieceRectangle.get(chosedRectange).getWinkel() == 0.0 ? "" : "-") + (int) listPieceRectangle.get(chosedRectange).getWinkel() + "°");
+    }
+
+    @FXML
+    public void addRectangle(){
+        int placeX = 600;
+        int placeY = 500;
+        boolean isAvailable = false;
+        if(addedRectange == 2){
+            addedRectange++;
+        }
+        for(int index = 0; index < listPieceRectangle.size(); index++){
+            if((listPieceRectangle.get(index).getX() == placeX && listPieceRectangle.get(index).getY() == placeY) || addedRectange > 20){
+                isAvailable = true;
+            }
+        }
+        if(!isAvailable){
+            if(addedRectange == 0){
+                chosedRectange = 0;
+            }
+            listPieceRectangle.get(addedRectange).getRectangle().setLayoutX(placeX);
+            listPieceRectangle.get(addedRectange).getRectangle().setLayoutY(placeY);
+            listPieceRectangle.get(addedRectange).setX(placeX);
+            listPieceRectangle.get(addedRectange).setY(placeY);
+            listPieceRectangle.get(addedRectange).getRectangle().setVisible(true);
+            listPieceRectangle.get(addedRectange++).getRectangle().setDisable(false);
+            slider_rechteckLaenge.setDisable(false);
+            slider_rechteckWinkel1.setDisable(false);
+        }
+
+    }
 
     @FXML
     private void onJoystickDragged(MouseEvent event){
@@ -368,6 +515,7 @@ public class Controller {
             //System.out.println("es rollt: " + index);
             // Winkel richtung Rechteck
             double rectangleWinkel = 360.0 - listPieceRectangle.get(listPieceCircle.get(index).rollingDetails[1]).getRectangle().getRotate();
+            //System.out.println("\n\n\nrectangleWinkel: " + rectangleWinkel);
             double alpha = Math.toRadians(rectangleWinkel);
 
             // Winkel entgegen Rechteck
@@ -382,17 +530,68 @@ public class Controller {
             double rectangleWinkelSenkrecht_entgegen = (rectangleWinkel + 90.0) % 360.0;
             double alpha_N_entgegen = Math.toRadians(rectangleWinkelSenkrecht_entgegen);
 
-            //System.out.print("alpha: " + rectangleWinkel);
-            //System.out.println(", alpha entgegen: " + rectangleWinkelEntgegen);
-            //System.out.print("alpha senkrecht: " + rectangleWinkelSenkrecht);
-            //System.out.println(", alpha senkrecht entgegen: " + rectangleWinkelSenkrecht_entgegen);
 
-            Vektor windA = new Vektor(0, 0);
-            if(windbeschleunigungA < 0.0){
-                windA = new Vektor(Math.abs(windbeschleunigungA) * cos(alpha_Entgegen), 0);
-            }else {
-                windA = new Vektor(Math.abs(windbeschleunigungA) * cos(alpha), 0);
+            /**
+             * Berücksichtigung von Wind:
+             * a_wind_parallel = a * cos(alpha)
+             * a_wind_senkrecht = a * sin(alpha)
+             * a_wind_reibung = a * sin(alpha) * µ
+             * aGesUP = a_wind_parallel - a_wind_reibung
+             * aGesDOWN = -a_wind_parallel - a_wind_reibung
+             */
+
+            // a_wind_parallel = a * cos(alpha)
+            double aWP = windbeschleunigungA * cos(alpha);
+            // a_wind_senkrecht = a * sin(alpha)
+            double aWS = windbeschleunigungA * sin(alpha);
+            // a_wind_reibung = a * sin(alpha) * µ
+            double aWR = aWS * listPieceCircle.get(index).reibungskoeffizient;
+            // Wenn Kugel nach oben rollt: aGes = a_wind_parallel - a_wind_reibung
+            double aWGesUP = aWP - aWR;
+            // Wenn Kugel nach unten rollt: aGes = -a_wind_parallel - a_wind_reibung
+            double aWGesDown = -aWP - aWR;
+            // Vektor in entsprechende Richtung nach oben
+            Vektor a_W_UP_Vektor = new Vektor(aWGesUP * cos(alpha_Entgegen), aWGesUP * sin(alpha_Entgegen));
+            // Vektor in entsprechende Richtung nach unten
+            Vektor a_W_DOWN_Vektor = new Vektor(aWGesDown * cos(alpha), aWGesDown * sin(alpha));
+
+
+            if(((rectangleWinkel > 10 && rectangleWinkel < 90) || (rectangleWinkel > 190 && rectangleWinkel < 270)) && windbeschleunigungA > 0 && geschwindigkeitV.länge() > 0.2){
+                //System.out.print("rollt links - ");
+                aWP = windbeschleunigungA * cos(alpha_Entgegen);
+                aWS = windbeschleunigungA * sin(alpha_Entgegen);
+                aWR = aWS * listPieceCircle.get(index).reibungskoeffizient;
+                aWGesUP = aWP - aWR;
+                aWGesDown = -aWP - aWR;
+                a_W_UP_Vektor = new Vektor(aWGesUP * cos(alpha), aWGesUP * sin(alpha));
+                a_W_DOWN_Vektor = new Vektor(aWGesDown * cos(alpha_Entgegen), aWGesDown * sin(alpha_Entgegen));
+
+                if(geschwindigkeitV.y < 0){
+                    beschleunigungA = a_W_DOWN_Vektor;
+                    beschleunigungA.scalareMultiplikationProdukt(-1);
+                    //System.out.println("besch DOWN: x: " + beschleunigungA.x + ", y: " + beschleunigungA.y);
+                }else {
+                    beschleunigungA = a_W_UP_Vektor;
+                    beschleunigungA.scalareMultiplikationProdukt(-1);
+                    //System.out.println("besch UP: x: " + beschleunigungA.x + ", y: " + beschleunigungA.y);
+                }
+            }else if(((rectangleWinkel > 90 && rectangleWinkel < 170) || (rectangleWinkel > 270 && rectangleWinkel < 350)) && windbeschleunigungA < 0 && geschwindigkeitV.länge() > 0.2){
+                //System.out.print("rollt rechts - ");
+                if(geschwindigkeitV.y < 0){
+                    beschleunigungA = a_W_DOWN_Vektor;
+                    beschleunigungA.scalareMultiplikationProdukt(-1);
+                    //System.out.println("besch DOWN: x: " + beschleunigungA.x + ", y: " + beschleunigungA.y);
+                }else {
+                    beschleunigungA = a_W_UP_Vektor;
+                    beschleunigungA.scalareMultiplikationProdukt(-1);
+                    //System.out.println("besch UP: x: " + beschleunigungA.x + ", y: " + beschleunigungA.y);
+                }
+            }else if((rectangleWinkel == 0 || rectangleWinkel == 180 || rectangleWinkel == 360) && windbeschleunigungA != 0.0){
+                //System.out.println("rollt flach");
+                beschleunigungA = a_W_DOWN_Vektor;
+                beschleunigungA.scalareMultiplikationProdukt(-1);
             }
+
 
             /**
              * Beschleunigungskomponente
@@ -404,56 +603,59 @@ public class Controller {
              * Reibungskraft-Komponente der Beschleunigung: a_R = (Gewicht * cos(alpha)) * μ
              * Resultierende Beschleunigung: a_ges = a_H - a_R
              */
-                //System.out.println("rollt runter");
-                // a_H = Gravitation * sin(alpha)
-                double a_H = gravitation.y * Math.sin(alpha);
-                // a_H in Vektor umwandeln - richtung der Kugel
-                Vektor a_H_Vektor = new Vektor(a_H * cos(alpha), a_H * sin(alpha));
+            //System.out.println("rollt runter");
+            // a_H = Gravitation * sin(alpha)
+            double a_H = gravitation.y * Math.sin(alpha);
+            // a_H in Vektor umwandeln - richtung der Kugel
+            Vektor a_H_Vektor = new Vektor(a_H * cos(alpha), a_H * sin(alpha));
 
-                // a_N = gravitation * cos(alpha)
-                double a_N = gravitation.y * Math.cos(alpha);
-                // a_H in Vektor umwandeln - Senkrecht zum Rechteck
-                Vektor a_N_Vektor = new Vektor(a_N * cos(alpha_N), a_N * sin(alpha_N));
-                if(rectangleWinkel > 270){
-                    a_N_Vektor = new Vektor(a_N * cos(alpha_N_entgegen), a_N * sin(alpha_N_entgegen));
-                }
+            // a_N = gravitation * cos(alpha)
+            double a_N = gravitation.y * Math.cos(alpha);
+            // a_H in Vektor umwandeln - Senkrecht zum Rechteck
+            Vektor a_N_Vektor = new Vektor(a_N * cos(alpha_N), a_N * sin(alpha_N));
+            if(rectangleWinkel < 270 && rectangleWinkel > 90){
+                a_N_Vektor = new Vektor(a_N * cos(alpha_N_entgegen), a_N * sin(alpha_N_entgegen));
+                //System.out.println("n entgegen");
+            }
 
-                // a_R = (Gewicht * cos(alpha)) * μ
-                Vektor a_R_Vektor = Vektor.scalareMultiplikationProdukt(a_N_Vektor, listPieceCircle.get(index).reibungskoeffizient);
+            // a_R = (Gewicht * cos(alpha)) * μ
+            Vektor a_R_Vektor = Vektor.scalareMultiplikationProdukt(a_N_Vektor, listPieceCircle.get(index).reibungskoeffizient);
 
-                // ar = velocity der kugel
-                Vektor a_R_Neu = new Vektor(geschwindigkeitV.x, geschwindigkeitV.y);
-                // ar normalisiert
-                a_R_Neu.normalisierung();
-                // ar * |aRVektor| * -1
-                a_R_Neu.scalareMultiplikationProdukt(a_R_Vektor.länge() * -1);
+            // ar = velocity der kugel
+            Vektor a_R_Neu = new Vektor(geschwindigkeitV.x, geschwindigkeitV.y);
+            // ar normalisiert
+            a_R_Neu.normalisierung();
+            // ar * |aRVektor| * -1
+            a_R_Neu.scalareMultiplikationProdukt(a_R_Vektor.länge() * -1);
 
-                Vektor a_H_Neu = new Vektor(geschwindigkeitV.x, geschwindigkeitV.y);
-                a_H_Neu.normalisierung();
-                if(geschwindigkeitV.y < 0){
-                    a_H_Neu.scalareMultiplikationProdukt(a_H_Vektor.länge());
-                }else {
-                    a_H_Neu.scalareMultiplikationProdukt(a_H_Vektor.länge() * -1);
-                }
+            Vektor a_H_Neu = new Vektor(geschwindigkeitV.x, geschwindigkeitV.y);
+            a_H_Neu.normalisierung();
+            if(geschwindigkeitV.y < 0){
+                a_H_Neu.scalareMultiplikationProdukt(a_H_Vektor.länge());
+            }else {
+                a_H_Neu.scalareMultiplikationProdukt(a_H_Vektor.länge() * -1);
+            }
 
-                Vektor a_Ges = Vektor.addition(a_H_Neu, a_R_Neu);
-                //System.out.println("ges: " + a_Ges.länge());
+            Vektor a_Ges = Vektor.addition(a_H_Neu, a_R_Neu);
+            //System.out.println("ges: " + a_Ges.länge());
 
-                if ((a_Ges.länge() < 0.2 || Double.isNaN(a_Ges.länge())) && (rectangleWinkel == 0 || rectangleWinkel == 180 || rectangleWinkel == 360)){
-                    a_Ges.x = 0;
-                    a_Ges.y = 0;
-                    geschwindigkeitV.x = 0;
-                    geschwindigkeitV.y = 0;
-                    listPieceCircle.get(index).getGeschwindigkeitV().scalareMultiplikationProdukt(0);
-                }else if(Math.abs(geschwindigkeitV.x) < 0.02 && (rectangleWinkel == 0 || rectangleWinkel == 180 || rectangleWinkel == 360)){
-                    a_Ges.x = 0;
-                    a_Ges.y = 0;
-                    geschwindigkeitV.x = 0;
-                    geschwindigkeitV.y = 0;
-                    listPieceCircle.get(index).getGeschwindigkeitV().scalareMultiplikationProdukt(0);
-                }
+            if ((a_Ges.länge() < 0.2 || Double.isNaN(a_Ges.länge())) && (rectangleWinkel == 0 || rectangleWinkel == 180 || rectangleWinkel == 360) && windbeschleunigungA == 0.0){
+                //System.out.println("problem hier");
+                //a_Ges.x = 0;
+                //a_Ges.y = 0;
+                //geschwindigkeitV.x = 0;
+                //geschwindigkeitV.y = 0;
+                //listPieceCircle.get(index).getGeschwindigkeitV().scalareMultiplikationProdukt(0);
+            }else if(Math.abs(geschwindigkeitV.x) < 0.02 && (rectangleWinkel == 0 || rectangleWinkel == 180 || rectangleWinkel == 360 && windbeschleunigungA == 0.0)){
+                //System.out.println("oder problem hier");
+                //a_Ges.x = 0;
+                //a_Ges.y = 0;
+                //geschwindigkeitV.x = 0;
+                //geschwindigkeitV.y = 0;
+                //listPieceCircle.get(index).getGeschwindigkeitV().scalareMultiplikationProdukt(0);
+            }
 
-                beschleunigungA = a_Ges;
+            beschleunigungA.addition(a_Ges);
         }/* Wenn die Kugel nicht rollt */ else {
             //System.out.println("Freier Fall");
             /**
@@ -535,8 +737,6 @@ public class Controller {
         double deltaDistanzY = deltaMurmel2Y - deltaMurmel1Y;
         double deltaDistance = Math.sqrt(deltaDistanzX * deltaDistanzX + deltaDistanzY * deltaDistanzY);
 
-        //System.out.println("distanz: " + distance + ", deltaDitanz: " + deltaDistance);
-
         // Überlappung feststellen
         if (distance < (murmel1Radius + murmel2Radius) && distance < deltaDistance) {
             for (int index = 0; index < listPieceCircle.size(); index++){
@@ -548,17 +748,17 @@ public class Controller {
             double collisionAngle = -Math.atan2(distanceY, distanceX);
             Vektor normalVector = new Vektor(-Math.cos(collisionAngle), Math.sin(collisionAngle));
 
-            // Energieverlust berechnen
-            murmel1.getGeschwindigkeitV().scalareMultiplikationProdukt(k);
-            murmel2.getGeschwindigkeitV().scalareMultiplikationProdukt(k);
-
             Vektor v_parallel_1 = Vektor.projektion(murmel1.getGeschwindigkeitV(), normalVector);
+            normalVector.scalareMultiplikationProdukt(-1);
             Vektor v_parallel_2 = Vektor.projektion(murmel2.getGeschwindigkeitV(), normalVector);
 
             // v_senkrecht = v - v_parallel
             Vektor v_senkrecht_1 = Vektor.subtraktion(murmel1.getGeschwindigkeitV(), v_parallel_1);
             Vektor v_senkrecht_2 = Vektor.subtraktion(murmel2.getGeschwindigkeitV(), v_parallel_2);
 
+            // Energieverlust berechnen
+            //v_parallel_1.scalareMultiplikationProdukt(k);
+            //v_parallel_2.scalareMultiplikationProdukt(k);
 
             // Berechnung der Massenverhältnisse
             double massSum = m1 + m2;
@@ -572,8 +772,13 @@ public class Controller {
              * Erweiterung:
              * v1' = v1'_parallel + v1_senkrecht
              * v2' = v2'_parallel + v2_senkrecht
+             *
+             * Formel (mit Teilelastischer Stoß):
+             * v'1 = m1 * v1 + m2 * v2 - m2 * (v1-v2) * k) / (m1 + m2)
+             * v'2 = m1 * v1 + m2 * v2 - m1 * (v2-v1) * k) / (m1 + m2)
              */
 
+            /*
             // m1v1 = m1 * v1
             Vektor m1v1 = Vektor.scalareMultiplikationProdukt(v_parallel_1, m1);
             // m2v2 = m2 * v2
@@ -585,7 +790,34 @@ public class Controller {
             v_strich_parallel.scalareMultiplikationProdukt(1 / massSum);
             // Rechenweg_teil_3 = Rechenweg_teil_2 * 2
             v_strich_parallel.scalareMultiplikationProdukt(2.0);
+            */
 
+            // m1v1 = m1 * v1
+            Vektor m1v1 = Vektor.scalareMultiplikationProdukt(v_parallel_1, m1);
+            // m2v2 = m2 * v2
+            Vektor m2v2 = Vektor.scalareMultiplikationProdukt(v_parallel_2, m2);
+            // m1 * v1 + m2 * v2
+            Vektor v_strich_parallel = Vektor.addition(m1v1, m2v2);
+
+            // v1'_parallel = ((m1 * v1 + m2 * v2 - m2 * (v1 - v2) * k)
+            Vektor v1_stirch_parallel = Vektor.subtraktion(v_strich_parallel, Vektor.scalareMultiplikationProdukt(Vektor.subtraktion(v_parallel_1, v_parallel_2), m2 * k));
+            // v2'_parallel = ((m1 * v1 + m2 * v2 - m1 * (v2 - v1) * k)
+            Vektor v2_strich_parallel = Vektor.subtraktion(v_strich_parallel, Vektor.scalareMultiplikationProdukt(Vektor.subtraktion(v_parallel_2, v_parallel_1), m1 * k));
+
+            // v1'_parallel = ((m1 * v1 + m2 * v2 - m2 * (v1 - v2) * k) / (m1 + m2)
+            v1_stirch_parallel.scalareMultiplikationProdukt(1 / massSum);
+            // v2'_parallel = ((m1 * v1 + m2 * v2 - m1 * (v2 - v1) * k) / (m1 + m2)
+            v2_strich_parallel.scalareMultiplikationProdukt(1 / massSum);
+
+
+
+            /*
+            // Rechenweg_teil_2 = Rechenweg_teil_1 / (m1 + m2)
+            v_strich_parallel.scalareMultiplikationProdukt(1 / massSum);
+            // Rechenweg_teil_3 = Rechenweg_teil_2 * 2
+            v_strich_parallel.scalareMultiplikationProdukt(2.0);
+            */
+            /*
             // v1'_parallel = Rechenweg_teil_3 - v1_parallel
             Vektor v1_strich_parallel = Vektor.subtraktion(v_strich_parallel, v_parallel_1);
             // Nun ist die Formel für v1'_parallel komplett: v1'_parallel = (2 * (m1 * v1_parallel + m2 * v2_parallel) / (m1 + m2)) - v1_parallel
@@ -597,54 +829,20 @@ public class Controller {
             // Nun ist die Formel für v1'_parallel komplett: v2'_parallel = (2 * (m1 * v1_parallel + m2 * v2_parallel) / (m1 + m2)) - v2_parallel
             // Formelerweiterung: v2' = v2'_parallel + v2_senkrecht
             Vektor v2_strich = Vektor.addition(v2_strich_parallel, v_senkrecht_2);
+            */
 
+            //  v1'= v1'_parallel + v1_senkrecht
+            Vektor v1_strich = Vektor.addition(v1_stirch_parallel, v_senkrecht_1);
+            //  v2'= v2'_parallel + v2_senkrecht
+            Vektor v2_strich = Vektor.addition(v2_strich_parallel, v_senkrecht_2);
 
             listPieceCircle.get(0).setGeschwindigkeitV(v1_strich);
             listPieceCircle.get(1).setGeschwindigkeitV(v2_strich);
-
-
-
-            /*
-            // Kollisionsnormalen berechnen
-            double collisionNormalX = distanceX / distance;
-            double collisionNormalY = distanceY / distance;
-
-            // Relativgeschwindigkeit berechnen
-            murmel1.getGeschwindigkeitV().scalareMultiplikationProdukt(k);
-            murmel2.getGeschwindigkeitV().scalareMultiplikationProdukt(k);
-            double relativeVelocityX = murmel2.getGeschwindigkeitV().x - murmel1.getGeschwindigkeitV().x;
-            double relativeVelocityY = murmel2.getGeschwindigkeitV().y - murmel1.getGeschwindigkeitV().y;
-
-            // Projektion der Relativgeschwindigkeit auf die Kollisionsnormalen
-            double normalRelativeVelocity = relativeVelocityX * collisionNormalX + relativeVelocityY * collisionNormalY;
-
-            double restitution = 1.0;
-
-            // Kollisionsimpuls berechnen
-            double impulseMagnitude = (-(1 + restitution) * normalRelativeVelocity) / (1 / murmel1Mass + 1 / murmel2Mass);
-            double impulseX = impulseMagnitude * collisionNormalX;
-            double impulseY = impulseMagnitude * collisionNormalY;
-
-            // Kollisionsimpuls auf die Murmeln anwenden
-            murmel1.applyImpulse(new Vektor(-impulseX, -impulseY));
-            murmel2.applyImpulse(new Vektor(impulseX, impulseY));
-
-            // Korrektur der Überlappung (Separating Axis Theorem)
-            double overlap = (murmel1Radius + murmel2Radius) - distance;
-            double overlapX = overlap * collisionNormalX;
-            double overlapY = overlap * collisionNormalY;
-            double totalInverseMass = 1 / murmel1Mass + 1 / murmel2Mass;
-            double correctionX = overlapX * (1 / murmel1Mass) / totalInverseMass;
-            double correctionY = overlapY * (1 / murmel1Mass) / totalInverseMass;
-            murmel1.position.x -= correctionX;
-            murmel1.position.y -= correctionY;
-            murmel2.position.x += correctionX;
-            murmel2.position.y += correctionY;
-            */
         }
     }
 
     public boolean isCollision(int index) {
+        //System.out.println("\n");
         // jedes Rechteck wird mit jedem Kugel verglichen
         for (int indexRectangle = 0; indexRectangle < listPieceRectangle.size(); indexRectangle++) {
             // mittelpunkt des rechtecks übernehmen, da es den startwert von links unten nimmt (x und y positionen).
@@ -653,6 +851,8 @@ public class Controller {
                     listPieceRectangle.get(indexRectangle).getA() / 2.0)};
             // winkel des rechtecks bekommen.
             double rechteckRotation = listPieceRectangle.get(indexRectangle).getWinkel();
+
+            //System.out.println("rechtangle " + indexRectangle + ": " + rechteckRotation);
 
             // Tatsächlichen Abstand von Rechteck zur Kugel nach der Höhe und breite messen
             double tatsächlicherAbstandHöhe = abstandKugelZumMittelLinie(vektorRechteckMittelpunkt, rechteckRotation, listPieceCircle.get(index));
@@ -679,10 +879,10 @@ public class Controller {
 
                         // Formel anwenden: v'_parallel = -v_parallel
                         Vektor v_strich_parallel = Vektor.scalareMultiplikationProdukt(v_parallel, -1);
-                        v_strich_parallel.scalareMultiplikationProdukt(k);
 
                         // v_senkrecht = v - v_parallel
                         Vektor v_senkrecht = Vektor.subtraktion(listPieceCircle.get(index).getGeschwindigkeitV(), v_parallel);
+                        v_strich_parallel.scalareMultiplikationProdukt(k);
 
                         // v'_senkrecht bleibt unverändert: v'_senkrecht = v_senkrecht
                         Vektor v_strich_senkrecht = v_senkrecht;
@@ -729,7 +929,6 @@ public class Controller {
                                 listPieceCircle.get(index).setGeschwindigkeitV(v_senkrecht);
                                 //System.out.println("rollt");
                             }
-
                         } else if(angle <= 90 || Double.isNaN(angle)) /* Wenn Kugel abprallt */ {
                             //System.out.println("seite");
 
@@ -857,7 +1056,7 @@ public class Controller {
     }
 
     public Vektor calculateNormalVector(double rectangleRotation) {
-        // Berechnen Sie den Normalenvektor basierend auf der Rotation des Rechtecks
+        // Berechnung der Normalenvektor mit Rotation des Rechtecks
         double[] normalVector = new double[2];
         normalVector[0] = -Math.sin(Math.toRadians(rectangleRotation));
         normalVector[1] = Math.cos(Math.toRadians(rectangleRotation));

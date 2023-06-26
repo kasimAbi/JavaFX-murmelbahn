@@ -20,6 +20,30 @@
 
 <AnchorPane fx:id="ganzerFeld" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseMoved="#displayPosition" prefHeight="750.0" prefWidth="1200.0" style="-fx-background-color: rgba(14, 37, 49, 0.8);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
+      <Circle fx:id="blaue_murmel" fill="DODGERBLUE" layoutX="455.0" layoutY="507.0" onMouseDragged="#onBlaueMurmelDragged" onMouseReleased="#onBlaueMurmelReleased" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
+      <Line fx:id="line" />
+      <Circle fx:id="gruene_murmel" fill="YELLOW" layoutX="678.0" layoutY="507.0" onMouseDragged="#onGrueneMurmelDragged" onMouseReleased="#onGrueneMurmelReleased" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle id="startbahn" fx:id="startbahn" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn1" fx:id="bahn1" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn4" fx:id="bahn4" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn3" fx:id="bahn3" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn5" fx:id="bahn5" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn6" fx:id="bahn6" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn7" fx:id="bahn7" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn8" fx:id="bahn8" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn9" fx:id="bahn9" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn10" fx:id="bahn10" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn11" fx:id="bahn11" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn12" fx:id="bahn12" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn13" fx:id="bahn13" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn14" fx:id="bahn14" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn15" fx:id="bahn15" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn16" fx:id="bahn16" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn17" fx:id="bahn17" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn18" fx:id="bahn18" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn19" fx:id="bahn19" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn20" fx:id="bahn20" fill="#2f2f2f" height="20.0" layoutY="375.0" onMouseClicked="#setRectangleChosed" onMouseDragged="#setRectanglePlace" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" />
+      <Rectangle id="bahn2" fx:id="bahn2" fill="#2f2f2f2e" height="15.0" layoutX="150.0" layoutY="735.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="4000.0" />
       <Pane minWidth="150.0" style="-fx-background-color: #2f2f2f;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="resetButton" alignment="CENTER" layoutX="25.0" layoutY="85.0" mnemonicParsing="false" onAction="#resetten" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #262626;" text="Resetten" textFill="WHITE">
@@ -27,7 +51,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="closeButton" alignment="CENTER" layoutX="25.0" layoutY="143.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #262626;" text="Schließen" textFill="WHITE">
+            <Button fx:id="closeButton" alignment="CENTER" layoutX="25.0" layoutY="143.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #262626;" text="Schließen" textFill="WHITE" visible="false">
                <font>
                   <Font size="18.0" />
                </font>
@@ -51,6 +75,10 @@
             <Text fx:id="text_richtung_gruene_murmel" fill="YELLOW" layoutX="10.0" layoutY="632.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Richtung: 270°" />
             <Text fx:id="text_gesch_gruene_murmel_y" fill="YELLOW" layoutX="10.0" layoutY="612.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Velocity y: 0m/s" />
             <Text fx:id="text_gesch_gruene_murmel_x" fill="YELLOW" layoutX="10.0" layoutY="592.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Velocity x: 0m/s" />
+            <Label layoutX="9.0" layoutY="137.0" text="Resettet:" textFill="WHITE" />
+            <Label layoutX="9.0" layoutY="160.0" text="- Gravitation" textFill="WHITE" />
+            <Label layoutX="9.0" layoutY="177.0" text="- Windbeschleunigung" textFill="WHITE" />
+            <Label layoutX="9.0" layoutY="194.0" text="- Kugelpositionen" textFill="WHITE" />
          </children>
       </Pane>
       <Pane id="pane_projekt" layoutX="150.0" layoutY="10.0" prefHeight="175.0" prefWidth="1043.0">
@@ -69,7 +97,7 @@
                      </font>
                   </Label>
                   <Label layoutX="45.0" layoutY="151.0" text="Rechteckwinkel:" textFill="WHITE" />
-                  <Slider id="slider_startwinkel" fx:id="slider_startwinkel" layoutX="210.0" layoutY="153.0" max="180.0" />
+                  <Slider id="slider_startwinkel" fx:id="slider_startwinkel" layoutX="210.0" layoutY="153.0" max="180.0" onMouseDragged="#setRectangleRotate" visible="false" />
                   <Label id="label_startwinkel" fx:id="label_startwinkel" layoutX="362.0" layoutY="151.0" text="0°" textFill="WHITE" />
                   <Label layoutX="719.0" layoutY="191.0" text="Startgeschwindigkeit:" textFill="WHITE" />
                   <Slider id="slider_startgeschwindigkeit" fx:id="slider_startgeschwindigkeit" layoutX="847.0" layoutY="193.0" max="20.0" />
@@ -123,15 +151,14 @@
                         <Insets />
                      </opaqueInsets>
                   </Button>
-                  <Label fx:id="status_text" layoutX="45.0" layoutY="183.0" text="Maus Position: X = 0, Y = 0" textFill="WHITE" />
+                  <Slider id="slider_startwinkel" fx:id="slider_rechteckWinkel1" disable="true" layoutX="211.0" layoutY="153.0" max="180.0" onMouseDragged="#setRectangleRotate" />
+                  <Slider id="slider_startwinkel" fx:id="slider_rechteckLaenge" disable="true" layoutX="210.0" layoutY="184.0" max="1000.0" min="10.0" onMouseDragged="#setRectangleLength" />
+                  <Label layoutX="45.0" layoutY="182.0" text="Rechtecklänge:" textFill="WHITE" />
+                  <Button fx:id="addedRectange_button" layoutX="397.0" layoutY="158.0" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#addRectangle" text="Rechteck++" />
                </children>
             </Pane>
          </children>
       </Pane>
-      <Circle fx:id="blaue_murmel" fill="DODGERBLUE" layoutX="455.0" layoutY="507.0" onMouseDragged="#onBlaueMurmelDragged" onMouseReleased="#onBlaueMurmelReleased" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
-      <Line fx:id="line" />
-      <Circle fx:id="gruene_murmel" fill="YELLOW" layoutX="678.0" layoutY="507.0" onMouseDragged="#onGrueneMurmelDragged" onMouseReleased="#onGrueneMurmelReleased" radius="10.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle id="startbahn" fx:id="startbahn" fill="#2f2f2f" height="20.0" layoutX="374.0" layoutY="407.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="400.0" />
       <ImageView id="button_play" fx:id="image_play_button" disable="true" fitHeight="70.0" fitWidth="70.0" layoutX="498.0" layoutY="632.0" nodeOrientation="INHERIT" onMouseClicked="#startAndPlay" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../images/resume.png" />
@@ -140,11 +167,11 @@
             <Rectangle2D />
          </viewport>
       </ImageView>
-      <Button fx:id="startButton" layoutX="600.0" layoutY="632.0" minWidth="75.0" mnemonicParsing="false" onAction="#startAndPlay" text="Start" />
-      <Button fx:id="uebernehmen_button" layoutX="1086.0" layoutY="218.0" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#uebernehmen" text="Übernehmen" />
-      <Rectangle id="startbahn" fx:id="bahn1" fill="#2f2f2f" height="20.0" layoutX="827.0" layoutY="465.0" rotate="165.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="293.0" />
-      <Rectangle id="startbahn" fx:id="bahn2" fill="#2f2f2f2e" height="15.0" layoutX="150.0" layoutY="735.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="4000.0" />
-      <Rectangle id="startbahn" fx:id="bahn4" fill="#2f2f2f" height="20.0" layoutX="672.0" layoutY="585.0" rotate="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="143.0" />
-      <Rectangle id="startbahn" fx:id="bahn3" fill="#2f2f2f" height="20.0" layoutX="836.0" layoutY="657.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
+      <Button fx:id="startButton" layoutX="945.0" layoutY="239.0" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#startAndPlay" text="Start" textFill="#00b000" />
+      <Button fx:id="uebernehmen_button" layoutX="1086.0" layoutY="239.0" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#uebernehmen" text="Übernehmen" />
+      <Slider id="slider_startwinkel" fx:id="slider_gewicht" layoutX="996.0" layoutY="213.0" max="5.0" min="0.3" value="0.3" />
+      <Label layoutX="882.0" layoutY="211.0" text="Gewicht der Kugel:" textFill="WHITE" />
+      <Label id="label_startgeschwindigkeit" fx:id="label_gewicht" layoutX="1144.0" layoutY="211.0" text="0,3 kg " textFill="WHITE" />
+      <Label fx:id="status_text" layoutX="195.0" layoutY="211.0" text="Maus Position: X = 0, Y = 0" textFill="WHITE" />
     </children>
 </AnchorPane>
