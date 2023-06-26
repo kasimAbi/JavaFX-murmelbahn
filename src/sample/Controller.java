@@ -1087,7 +1087,6 @@ public class Controller {
         return Math.abs(kreuzprodukt)/Math.sqrt(Math.pow(vektorGeraden[0], 2) + Math.pow(vektorGeraden[1], 2));
     }
 
-
     public double abstandKugelZumMittelLinieOhneAbs(double[] vektorRechteckMittelpunkt, double rechteckRotation, PieceCircle pieceCircle){
         // Erstellt den Mittelpunkt des Kugels
         double[] vektorMurmelMittelpunkt = new double[]{pieceCircle.getCircle().getLayoutX(), pieceCircle.getCircle().getLayoutY()};
