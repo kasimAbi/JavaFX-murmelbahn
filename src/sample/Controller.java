@@ -870,23 +870,22 @@ public class Controller {
 
                         // Wenn v'_parallel eine Länge kleiner 0.1 hat, um ins rollen überzugehen
                         if (v_strich_parallel.länge() < 0.1 && !(Math.abs(Math.abs(abstandBreiteBerührung) - Math.abs(tatsächlicherAbstandBreite)) <= 5)) {
+                            // Wenn Kugel rollt und sich auch nicht weg von dem Rechteck bewegt
                             if((rechteckRotation < 90 && tatsächlicherAbstandHöheOhneAbs > 0.0) || (rechteckRotation > 90 && tatsächlicherAbstandHöheOhneAbs < 0.0)){
-                                //System.out.println("rollt");
                                 listPieceCircle.get(index).isRolling = true;
                                 // Der Code ist erstmal nicht wichtig, sagt nur das die Kugel rollt (Doppelt gemoppelt, aber eventuell später brauchbar)
                                 listPieceCircle.get(index).rollingDetails[0] = 1;
                                 // Auf welchem Rechteck die Kugel rollt speichern
                                 listPieceCircle.get(index).rollingDetails[1] = indexRectangle;
                                 listPieceCircle.get(index).setGeschwindigkeitV(v_senkrecht);
-
                             }
                         } else if(angle <= 90 || Double.isNaN(angle)) /* Wenn Kugel abprallt */ {
+                            // Wenn von einer Seite des Rechtecks abprallt
                             if(Math.abs(Math.abs(abstandBreiteBerührung) - Math.abs(tatsächlicherAbstandBreite)) <= 5){
-                                //System.out.println("prallt an einer seite von rechteck");
                                 new_v.scalareMultiplikationProdukt(-1);
                             }
 
-                            // aktualisierung der Geschwindigkeit des kugels
+                            // Aktualisierung der Geschwindigkeit des Kugels
                             listPieceCircle.get(index).setGeschwindigkeitV(new_v);
                         }
                     }else{
@@ -895,9 +894,8 @@ public class Controller {
                             indexRectangle--;
                         }
                     }
-                }else /* Wenn die Kugel aufhört zu rollen */ {
+                }else /* Wenn die Kugel aufhört zu rollen und eine Eckenkollision stattfindet */ {
                     zuruecksetzen(index);
-                    //System.out.println("ecke");
 
                     double tatsächlicherAbstandHöheOhneAbs = abstandKugelZumMittelLinieOhneAbs(vektorRechteckMittelpunkt, rechteckRotation, listPieceCircle.get(index));
                     double tatsächlicherAbstandBreiteOhneAbs = abstandKugelZumMittelLinieOhneAbs(vektorRechteckMittelpunkt, rechteckRotation +
