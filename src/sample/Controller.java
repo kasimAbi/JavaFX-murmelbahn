@@ -114,7 +114,7 @@ public class Controller {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 startGeschwindigkeit = t1.doubleValue();
-                label_startgeschwindigkeit.setText(df2.format(startGeschwindigkeit) + " m/s.");
+                label_startgeschwindigkeit.setText(df2.format(startGeschwindigkeit) + " m/s");
             }
         });
 
@@ -252,6 +252,14 @@ public class Controller {
         if (buttonPlay){
             startAndPlay();
         }
+
+        slider_startgeschwindigkeit.setValue(0);
+        slider_gewicht.setValue(0.3);
+
+        label_gewicht.setText(0.3 + " kg");
+        label_startgeschwindigkeit.setText(0 + " m/s");
+
+        uebernehmen();
     }
 
     @FXML
@@ -637,23 +645,6 @@ public class Controller {
             }
 
             Vektor a_Ges = Vektor.addition(a_H_Neu, a_R_Neu);
-            //System.out.println("ges: " + a_Ges.länge());
-
-            if ((a_Ges.länge() < 0.2 || Double.isNaN(a_Ges.länge())) && (rectangleWinkel == 0 || rectangleWinkel == 180 || rectangleWinkel == 360) && windbeschleunigungA == 0.0){
-                //System.out.println("problem hier");
-                //a_Ges.x = 0;
-                //a_Ges.y = 0;
-                //geschwindigkeitV.x = 0;
-                //geschwindigkeitV.y = 0;
-                //listPieceCircle.get(index).getGeschwindigkeitV().scalareMultiplikationProdukt(0);
-            }else if(Math.abs(geschwindigkeitV.x) < 0.02 && (rectangleWinkel == 0 || rectangleWinkel == 180 || rectangleWinkel == 360 && windbeschleunigungA == 0.0)){
-                //System.out.println("oder problem hier");
-                //a_Ges.x = 0;
-                //a_Ges.y = 0;
-                //geschwindigkeitV.x = 0;
-                //geschwindigkeitV.y = 0;
-                //listPieceCircle.get(index).getGeschwindigkeitV().scalareMultiplikationProdukt(0);
-            }
 
             beschleunigungA.addition(a_Ges);
         }/* Wenn die Kugel nicht rollt */ else {
@@ -756,10 +747,6 @@ public class Controller {
             Vektor v_senkrecht_1 = Vektor.subtraktion(murmel1.getGeschwindigkeitV(), v_parallel_1);
             Vektor v_senkrecht_2 = Vektor.subtraktion(murmel2.getGeschwindigkeitV(), v_parallel_2);
 
-            // Energieverlust berechnen
-            //v_parallel_1.scalareMultiplikationProdukt(k);
-            //v_parallel_2.scalareMultiplikationProdukt(k);
-
             // Berechnung der Massenverhältnisse
             double massSum = m1 + m2;
 
@@ -769,28 +756,13 @@ public class Controller {
              * v1'_parallel = (2 * (m1 * v1_parallel + m2 * v2_parallel) / (m1 + m2)) - v1_parallel
              * v2'_parallel = (2 * (m1 * v1_parallel + m2 * v2_parallel) / (m1 + m2)) - v2_parallel
              *
-             * Erweiterung:
              * v1' = v1'_parallel + v1_senkrecht
              * v2' = v2'_parallel + v2_senkrecht
              *
-             * Formel (mit Teilelastischer Stoß):
+             * Formel (mit Teilelastischer Stoß), die angewendet wurde für die Rechnungen:
              * v'1 = m1 * v1 + m2 * v2 - m2 * (v1-v2) * k) / (m1 + m2)
              * v'2 = m1 * v1 + m2 * v2 - m1 * (v2-v1) * k) / (m1 + m2)
              */
-
-            /*
-            // m1v1 = m1 * v1
-            Vektor m1v1 = Vektor.scalareMultiplikationProdukt(v_parallel_1, m1);
-            // m2v2 = m2 * v2
-            Vektor m2v2 = Vektor.scalareMultiplikationProdukt(v_parallel_2, m2);
-
-            // Rechenweg_teil_1 =  m1v1 + m2v2
-            Vektor v_strich_parallel = Vektor.addition(m1v1, m2v2);
-            // Rechenweg_teil_2 = Rechenweg_teil_1 / (m1 + m2)
-            v_strich_parallel.scalareMultiplikationProdukt(1 / massSum);
-            // Rechenweg_teil_3 = Rechenweg_teil_2 * 2
-            v_strich_parallel.scalareMultiplikationProdukt(2.0);
-            */
 
             // m1v1 = m1 * v1
             Vektor m1v1 = Vektor.scalareMultiplikationProdukt(v_parallel_1, m1);
@@ -809,28 +781,6 @@ public class Controller {
             // v2'_parallel = ((m1 * v1 + m2 * v2 - m1 * (v2 - v1) * k) / (m1 + m2)
             v2_strich_parallel.scalareMultiplikationProdukt(1 / massSum);
 
-
-
-            /*
-            // Rechenweg_teil_2 = Rechenweg_teil_1 / (m1 + m2)
-            v_strich_parallel.scalareMultiplikationProdukt(1 / massSum);
-            // Rechenweg_teil_3 = Rechenweg_teil_2 * 2
-            v_strich_parallel.scalareMultiplikationProdukt(2.0);
-            */
-            /*
-            // v1'_parallel = Rechenweg_teil_3 - v1_parallel
-            Vektor v1_strich_parallel = Vektor.subtraktion(v_strich_parallel, v_parallel_1);
-            // Nun ist die Formel für v1'_parallel komplett: v1'_parallel = (2 * (m1 * v1_parallel + m2 * v2_parallel) / (m1 + m2)) - v1_parallel
-            // Formelerweiterung: v1' = v1'_parallel + v1_senkrecht
-            Vektor v1_strich = Vektor.addition(v1_strich_parallel, v_senkrecht_1);
-
-            // v1'_parallel = Rechenweg_teil_3 - v2_parallel
-            Vektor v2_strich_parallel = Vektor.subtraktion(v_strich_parallel, v_parallel_2);
-            // Nun ist die Formel für v1'_parallel komplett: v2'_parallel = (2 * (m1 * v1_parallel + m2 * v2_parallel) / (m1 + m2)) - v2_parallel
-            // Formelerweiterung: v2' = v2'_parallel + v2_senkrecht
-            Vektor v2_strich = Vektor.addition(v2_strich_parallel, v_senkrecht_2);
-            */
-
             //  v1'= v1'_parallel + v1_senkrecht
             Vektor v1_strich = Vektor.addition(v1_stirch_parallel, v_senkrecht_1);
             //  v2'= v2'_parallel + v2_senkrecht
@@ -842,7 +792,6 @@ public class Controller {
     }
 
     public boolean isCollision(int index) {
-        //System.out.println("\n");
         // jedes Rechteck wird mit jedem Kugel verglichen
         for (int indexRectangle = 0; indexRectangle < listPieceRectangle.size(); indexRectangle++) {
             // mittelpunkt des rechtecks übernehmen, da es den startwert von links unten nimmt (x und y positionen).
@@ -851,8 +800,6 @@ public class Controller {
                     listPieceRectangle.get(indexRectangle).getA() / 2.0)};
             // winkel des rechtecks bekommen.
             double rechteckRotation = listPieceRectangle.get(indexRectangle).getWinkel();
-
-            //System.out.println("rechtangle " + indexRectangle + ": " + rechteckRotation);
 
             // Tatsächlichen Abstand von Rechteck zur Kugel nach der Höhe und breite messen
             double tatsächlicherAbstandHöhe = abstandKugelZumMittelLinie(vektorRechteckMittelpunkt, rechteckRotation, listPieceCircle.get(index));
@@ -882,6 +829,8 @@ public class Controller {
 
                         // v_senkrecht = v - v_parallel
                         Vektor v_senkrecht = Vektor.subtraktion(listPieceCircle.get(index).getGeschwindigkeitV(), v_parallel);
+
+                        // Energieverlust
                         v_strich_parallel.scalareMultiplikationProdukt(k);
 
                         // v'_senkrecht bleibt unverändert: v'_senkrecht = v_senkrecht
@@ -895,6 +844,7 @@ public class Controller {
                         double tatsächlicherAbstandBreiteOhneAbs = abstandKugelZumMittelLinieOhneAbs(vektorRechteckMittelpunkt, rechteckRotation +
                                 90, listPieceCircle.get(index));
 
+                        // Normalen zum Rechteck berechnen
                         Vektor normaleNachOben = calculateNormalVector(rechteckRotation);
                         Vektor normaleNachRechts = calculateNormalVector(rechteckRotation + 270);
                         Vektor normaleNachUnten = calculateNormalVector(rechteckRotation + 180);
@@ -905,6 +855,7 @@ public class Controller {
                         Point2D normalePL = new Point2D(normaleNachLinks.x, -normaleNachLinks.y);
                         double angle = 0.0;
 
+                        // Winkel in Richtung Rechteck oder weg vom Rechteck berechnen (Wenn Winkel > 90, dann bewegt es sich weg vom Rechteck)
                         if(Math.abs(Math.abs(abstandBreiteBerührung) - Math.abs(tatsächlicherAbstandBreite)) <= 5){
                             if (tatsächlicherAbstandBreiteOhneAbs < 0.0){
                                 angle = new Point2D(listPieceCircle.get(index).getGeschwindigkeitV().x, listPieceCircle.get(index).getGeschwindigkeitV().y).angle(normalePR);
@@ -919,22 +870,22 @@ public class Controller {
 
                         // Wenn v'_parallel eine Länge kleiner 0.1 hat, um ins rollen überzugehen
                         if (v_strich_parallel.länge() < 0.1 && !(Math.abs(Math.abs(abstandBreiteBerührung) - Math.abs(tatsächlicherAbstandBreite)) <= 5)) {
-                            //System.out.println("rechteckrotation: " + rechteckRotation + ", tatH: " + tatsächlicherAbstandHöheOhneAbs);
                             if((rechteckRotation < 90 && tatsächlicherAbstandHöheOhneAbs > 0.0) || (rechteckRotation > 90 && tatsächlicherAbstandHöheOhneAbs < 0.0)){
+                                //System.out.println("rollt");
                                 listPieceCircle.get(index).isRolling = true;
                                 // Der Code ist erstmal nicht wichtig, sagt nur das die Kugel rollt (Doppelt gemoppelt, aber eventuell später brauchbar)
                                 listPieceCircle.get(index).rollingDetails[0] = 1;
                                 // Auf welchem Rechteck die Kugel rollt speichern
                                 listPieceCircle.get(index).rollingDetails[1] = indexRectangle;
                                 listPieceCircle.get(index).setGeschwindigkeitV(v_senkrecht);
-                                //System.out.println("rollt");
+
                             }
                         } else if(angle <= 90 || Double.isNaN(angle)) /* Wenn Kugel abprallt */ {
-                            //System.out.println("seite");
-
                             if(Math.abs(Math.abs(abstandBreiteBerührung) - Math.abs(tatsächlicherAbstandBreite)) <= 5){
+                                //System.out.println("prallt an einer seite von rechteck");
                                 new_v.scalareMultiplikationProdukt(-1);
                             }
+
                             // aktualisierung der Geschwindigkeit des kugels
                             listPieceCircle.get(index).setGeschwindigkeitV(new_v);
                         }
@@ -952,9 +903,12 @@ public class Controller {
                     double tatsächlicherAbstandBreiteOhneAbs = abstandKugelZumMittelLinieOhneAbs(vektorRechteckMittelpunkt, rechteckRotation +
                             90, listPieceCircle.get(index));
 
+                    // oben true, unten false
                     boolean oben_unten = false;
+                    // links true, rechts false
                     boolean links_rechts = false;
 
+                    // Gucken, von wo die Kugel kollidiert (oben, unten, rechts oder links)
                     if (tatsächlicherAbstandBreiteOhneAbs < 0.0){
                         links_rechts = true;
                     }else if (tatsächlicherAbstandBreiteOhneAbs > 0.0){
@@ -965,17 +919,28 @@ public class Controller {
                     }else if (tatsächlicherAbstandHöheOhneAbs < 0.0){
                         oben_unten = false;
                     }
+
+                    // Eckpunkt wird erstmal mit Rechteckmittelpunkt gleichgesetzt
                     Vektor eckpunkt = new Vektor(vektorRechteckMittelpunkt[0], vektorRechteckMittelpunkt[1]);
+
+                    // Oben linke Ecke
                     if(oben_unten && links_rechts){
-                         Vektor r1 = new Vektor(cos(Math.toRadians(rechteckRotation)) * listPieceRectangle.get(indexRectangle).getB()/2.0,
+                        // in dem Fall wird der Vektor von Rechteckmittelpunkt zur Mitte der linken Seite berechnet.
+                        Vektor r1 = new Vektor(cos(Math.toRadians(rechteckRotation)) * listPieceRectangle.get(indexRectangle).getB()/2.0,
                                 sin(Math.toRadians(rechteckRotation)) * listPieceRectangle.get(indexRectangle).getB()/2.0);
+                        // Hier wird der Vektor von Rechteckmittelpunkt zur oberen Mitte des Rechtecks berechnet
                         Vektor r2 = new Vektor(cos(Math.toRadians(rechteckRotation + 90)) * listPieceRectangle.get(indexRectangle).getA()/2.0,
                                 sin(Math.toRadians(rechteckRotation + 90)) * listPieceRectangle.get(indexRectangle).getA()/2.0);
+                        // r1 * -1 weil es links ist und der im Koordinatensystem nach links minus ist.
                         r1.scalareMultiplikationProdukt(-1);
+                        // r2 * -1 weil es oben ist und der im Koordinatensystem nach oben minus ist.
                         r2.scalareMultiplikationProdukt(-1);
+                        // beide punkte miteinander addieren, um den Vektor in Richtung und Abstand zur Ecke von Mittelpunkt des Rechtecks zu erhalten.
                         r1.addition(r2);
+                        // Mit Rechteckmittelpunkt zusammenrechnen, um den Eckpunkt zu erhalten.
                         eckpunkt.addition(r1);
-                    }else if(!oben_unten && links_rechts){
+                        // Der Code wird für die anderen Ecken genauso berechnet
+                    }else if(!oben_unten && links_rechts) /* Unten linke Ecke */ {
                         Vektor r1 = new Vektor(cos(Math.toRadians(rechteckRotation)) * listPieceRectangle.get(indexRectangle).getB()/2.0,
                                 sin(Math.toRadians(rechteckRotation)) * listPieceRectangle.get(indexRectangle).getB()/2.0);
                         Vektor r2 = new Vektor(cos(Math.toRadians(rechteckRotation + 90)) * listPieceRectangle.get(indexRectangle).getA()/2.0,
@@ -983,7 +948,7 @@ public class Controller {
                         r1.scalareMultiplikationProdukt(-1);
                         r1.addition(r2);
                         eckpunkt.addition(r1);
-                    }else if(oben_unten && !links_rechts){
+                    }else if(oben_unten && !links_rechts) /* Oben rechte Ecke */ {
                         Vektor r1 = new Vektor(cos(Math.toRadians(rechteckRotation)) * listPieceRectangle.get(indexRectangle).getB()/2.0,
                                 sin(Math.toRadians(rechteckRotation)) * listPieceRectangle.get(indexRectangle).getB()/2.0);
                         Vektor r2 = new Vektor(cos(Math.toRadians(rechteckRotation + 90)) * listPieceRectangle.get(indexRectangle).getA()/2.0,
@@ -991,7 +956,7 @@ public class Controller {
                         r1.scalareMultiplikationProdukt(-1);
                         r1.addition(r2);
                         eckpunkt.subtraktion(r1);
-                    }else if(!oben_unten && !links_rechts){
+                    }else if(!oben_unten && !links_rechts) /* Unten rechte Ecke */ {
                         Vektor r1 = new Vektor(cos(Math.toRadians(rechteckRotation)) * listPieceRectangle.get(indexRectangle).getB()/2.0,
                                 sin(Math.toRadians(rechteckRotation)) * listPieceRectangle.get(indexRectangle).getB()/2.0);
                         Vektor r2 = new Vektor(cos(Math.toRadians(rechteckRotation + 90)) * listPieceRectangle.get(indexRectangle).getA()/2.0,
@@ -1002,15 +967,20 @@ public class Controller {
                         eckpunkt.subtraktion(r1);
                     }
 
+                    // Kugel position in Vektor circle
                     Vektor circle = new Vektor(listPieceCircle.get(index).getCircle().getLayoutX(), listPieceCircle.get(index).getCircle().getLayoutY());
+                    // Normale der Ecke berechnen mit eckpunkt - circleposition
                     Vektor normale = Vektor.subtraktion(eckpunkt, circle);
+                    // Weil Koordinatensystem andersrum und es ist ein festes Element
                     normale.y *= -1;
+                    // Normalisierung der berechneten Normale
                     normale.normalisierung();
-                    //System.out.println("normale x: " + normale.x + ", " + normale.y);
+                    // Normale und Geschwindigkeit in Point2D umwandeln aufgrund der angle-Methode
                     Point2D normaleP = new Point2D(normale.x, normale.y);
                     Point2D velocity = new Point2D(listPieceCircle.get(index).getGeschwindigkeitV().x, listPieceCircle.get(index).getGeschwindigkeitV().y);
+                    // Wenn man nun die angle-Methode zwischen der Normale und der Geschwindigkeit der Kugel errechnet, erhält man, ob die Kugel in
+                    // Richtung Ecke bewegt oder sich fern von der Ecke
                     double angle = normaleP.angle(velocity);
-                    //System.out.println("angle: " + angle);
 
                     // Normalenvektor berechnen (-rechteckRotation, weil Winkel in Uhrzeigersinn ist).
                     Vektor normalVector = normale;
@@ -1021,10 +991,12 @@ public class Controller {
 
                     // Formel anwenden: v'_parallel = -v_parallel
                     Vektor v_strich_parallel = Vektor.scalareMultiplikationProdukt(v_parallel, -1);
-                    v_strich_parallel.scalareMultiplikationProdukt(k);
 
                     // v_senkrecht = v - v_parallel
                     Vektor v_senkrecht = Vektor.subtraktion(listPieceCircle.get(index).getGeschwindigkeitV(), v_parallel);
+
+                    // Energieverlust an der Ecke
+                    v_strich_parallel.scalareMultiplikationProdukt(k);
 
                     // v'_senkrecht bleibt unverändert: v'_senkrecht = v_senkrecht
                     Vektor v_strich_senkrecht = v_senkrecht;
