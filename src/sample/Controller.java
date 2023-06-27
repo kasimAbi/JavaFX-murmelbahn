@@ -520,10 +520,8 @@ public class Controller {
 
         // Wenn die Kugel rollt
         if (listPieceCircle.get(index).isRolling){
-            //System.out.println("es rollt: " + index);
             // Winkel richtung Rechteck
             double rectangleWinkel = 360.0 - listPieceRectangle.get(listPieceCircle.get(index).rollingDetails[1]).getRectangle().getRotate();
-            //System.out.println("\n\n\nrectangleWinkel: " + rectangleWinkel);
             double alpha = Math.toRadians(rectangleWinkel);
 
             // Winkel entgegen Rechteck
@@ -537,7 +535,6 @@ public class Controller {
             // Winkel Senkrecht zum Rechteck (wenn Rechteck Oberfläche nach unten zeigt)
             double rectangleWinkelSenkrecht_entgegen = (rectangleWinkel + 90.0) % 360.0;
             double alpha_N_entgegen = Math.toRadians(rectangleWinkelSenkrecht_entgegen);
-
 
             /**
              * Berücksichtigung von Wind:
@@ -563,9 +560,9 @@ public class Controller {
             // Vektor in entsprechende Richtung nach unten
             Vektor a_W_DOWN_Vektor = new Vektor(aWGesDown * cos(alpha), aWGesDown * sin(alpha));
 
-
             if(((rectangleWinkel > 10 && rectangleWinkel < 90) || (rectangleWinkel > 190 && rectangleWinkel < 270)) && windbeschleunigungA > 0 && geschwindigkeitV.länge() > 0.2){
-                //System.out.print("rollt links - ");
+                // Rollt nach links
+                // Gleiche Rechnungen wie oben für Wind, nur mit Entgegenwinkel vom Rechteck
                 aWP = windbeschleunigungA * cos(alpha_Entgegen);
                 aWS = windbeschleunigungA * sin(alpha_Entgegen);
                 aWR = aWS * listPieceCircle.get(index).reibungskoeffizient;
@@ -575,31 +572,30 @@ public class Controller {
                 a_W_DOWN_Vektor = new Vektor(aWGesDown * cos(alpha_Entgegen), aWGesDown * sin(alpha_Entgegen));
 
                 if(geschwindigkeitV.y < 0){
+                    // Rollt nach unten
                     beschleunigungA = a_W_DOWN_Vektor;
                     beschleunigungA.scalareMultiplikationProdukt(-1);
-                    //System.out.println("besch DOWN: x: " + beschleunigungA.x + ", y: " + beschleunigungA.y);
                 }else {
+                    // Rollt nach oben
                     beschleunigungA = a_W_UP_Vektor;
                     beschleunigungA.scalareMultiplikationProdukt(-1);
-                    //System.out.println("besch UP: x: " + beschleunigungA.x + ", y: " + beschleunigungA.y);
                 }
             }else if(((rectangleWinkel > 90 && rectangleWinkel < 170) || (rectangleWinkel > 270 && rectangleWinkel < 350)) && windbeschleunigungA < 0 && geschwindigkeitV.länge() > 0.2){
-                //System.out.print("rollt rechts - ");
+                // Rollt nach rechts
                 if(geschwindigkeitV.y < 0){
+                    // Rollt nach unten
                     beschleunigungA = a_W_DOWN_Vektor;
                     beschleunigungA.scalareMultiplikationProdukt(-1);
-                    //System.out.println("besch DOWN: x: " + beschleunigungA.x + ", y: " + beschleunigungA.y);
                 }else {
+                    // Rollt nach oben
                     beschleunigungA = a_W_UP_Vektor;
                     beschleunigungA.scalareMultiplikationProdukt(-1);
-                    //System.out.println("besch UP: x: " + beschleunigungA.x + ", y: " + beschleunigungA.y);
                 }
             }else if((rectangleWinkel == 0 || rectangleWinkel == 180 || rectangleWinkel == 360) && windbeschleunigungA != 0.0){
-                //System.out.println("rollt flach");
+                // Wenn Kugel flach rollt
                 beschleunigungA = a_W_DOWN_Vektor;
                 beschleunigungA.scalareMultiplikationProdukt(-1);
             }
-
 
             /**
              * Beschleunigungskomponente
@@ -611,7 +607,6 @@ public class Controller {
              * Reibungskraft-Komponente der Beschleunigung: a_R = (Gewicht * cos(alpha)) * μ
              * Resultierende Beschleunigung: a_ges = a_H - a_R
              */
-            //System.out.println("rollt runter");
             // a_H = Gravitation * sin(alpha)
             double a_H = gravitation.y * Math.sin(alpha);
             // a_H in Vektor umwandeln - richtung der Kugel
@@ -621,9 +616,9 @@ public class Controller {
             double a_N = gravitation.y * Math.cos(alpha);
             // a_H in Vektor umwandeln - Senkrecht zum Rechteck
             Vektor a_N_Vektor = new Vektor(a_N * cos(alpha_N), a_N * sin(alpha_N));
+            // Wenn Rechteck-oberseite nach unten zeigt
             if(rectangleWinkel < 270 && rectangleWinkel > 90){
                 a_N_Vektor = new Vektor(a_N * cos(alpha_N_entgegen), a_N * sin(alpha_N_entgegen));
-                //System.out.println("n entgegen");
             }
 
             // a_R = (Gewicht * cos(alpha)) * μ
